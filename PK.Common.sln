@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PK.Common", "Sources\PK.Common\PK.Common.csproj", "{1428C867-5CCC-4EC7-B2D2-7F5C3C6016DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PK.Common.Tests", "Tests\PK.Common.Tests\PK.Common.Tests.csproj", "{2BA92D64-6A7A-4BA0-ADA6-ACAE32AA80DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B5DD4B77-682C-4468-9120-4574AFC10902}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Clean.cmd = Clean.cmd
+		LICENSE = LICENSE
+		README.md = README.md
+		Release.ps1 = Release.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4EDD03B5-C539-412E-ABA9-EEA2383837C0}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1428C867-5CCC-4EC7-B2D2-7F5C3C6016DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1428C867-5CCC-4EC7-B2D2-7F5C3C6016DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1428C867-5CCC-4EC7-B2D2-7F5C3C6016DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1428C867-5CCC-4EC7-B2D2-7F5C3C6016DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BA92D64-6A7A-4BA0-ADA6-ACAE32AA80DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BA92D64-6A7A-4BA0-ADA6-ACAE32AA80DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BA92D64-6A7A-4BA0-ADA6-ACAE32AA80DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BA92D64-6A7A-4BA0-ADA6-ACAE32AA80DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
