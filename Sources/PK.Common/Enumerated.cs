@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace PK.Common
@@ -15,6 +14,9 @@ namespace PK.Common
     public abstract class Enumerated<TEnumerated, TValue> : IEnumerated<TEnumerated, TValue>
         where TEnumerated : class, IEnumerated<TEnumerated, TValue>
     {
+        private static DictionaryWithNullKey<TValue, TEnumerated> _dict = null;
+
+
         /// <summary>
         /// The value of the enumerated type
         /// </summary>
@@ -24,13 +26,45 @@ namespace PK.Common
         [DataMember]
         public virtual TValue Value { get; private set; }
 
+        static Enumerated()
+        {
+            //force type init for the descriptor
+            RuntimeHelpers.RunClassConstructor(typeof(TEnumerated).TypeHandle);
+        }
         /// <summary>
         /// Initializes a new instance of the Enumerated class with a value indicated by a TValue
         /// </summary>
         /// <param name="value">The value if the enumerated instance to create</param>
         public Enumerated(TValue value)
         {
+            InitDictionary();
             Value = value;
+
+            TEnumerated enumValue;
+
+            enumValue = this as TEnumerated;
+            if (value != null)
+            {
+                _dict.Add(value, enumValue);
+            }
+            else
+            {
+                _dict.NullValue = enumValue;
+            }
+        }
+
+        private void InitDictionary()
+        {
+            if (_dict == null)
+            {
+                lock (TypeLock<TEnumerated>.SyncLock)
+                {
+                    if (_dict == null)
+                    {
+                        _dict = new DictionaryWithNullKey<TValue, TEnumerated>();
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -39,14 +73,7 @@ namespace PK.Common
         /// <returns>All defined enumerated items</returns>
         public static IEnumerable<TEnumerated> GetAll()
         {
-            //TODO: Performance
-            foreach (FieldInfo field in typeof(TEnumerated).GetFields(BindingFlags.Public | BindingFlags.Static))
-            {
-                if (field.FieldType == typeof(TEnumerated))
-                {
-                    yield return (TEnumerated)field.GetValue(typeof(TEnumerated));
-                }
-            }
+            return _dict.Values;
         }
         /// <summary>
         /// Gets the enumerated item with the specified value
@@ -78,18 +105,40 @@ namespace PK.Common
         /// <returns>The enumerated item with the specified value or null if none exists</returns>
         public static TEnumerated GetOrDefault(TValue value)
         {
+            TEnumerated foundValue;
             if (value != null)
             {
-                return (from codeListItem in GetAll()
-                        where codeListItem.Value.Equals(value)
-                        select codeListItem).SingleOrDefault();
+                if (_dict.ContainsKey(value))
+                {
+                    foundValue = _dict[value];
+                }
+                else
+                {
+                    foundValue = null;
+                }
             }
             else
             {
-                return (from codeListItem in GetAll()
-                        where codeListItem.Value == null
-                        select codeListItem).SingleOrDefault();
+                if (_dict.NullValue != null)
+                {
+                    foundValue = _dict.NullValue;
+                }
+                else
+                {
+                    foundValue = null;
+                }
             }
+
+            return foundValue;
+        }
+
+        private static class TypeLock<T>
+        {
+            public static readonly object SyncLock = new object();
+        }
+        private class DictionaryWithNullKey<TKey, TValue> : Dictionary<TKey, TValue>
+        {
+            public TValue NullValue { get; set; }
         }
     }
 }
