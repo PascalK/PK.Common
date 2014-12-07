@@ -136,9 +136,9 @@ namespace PK.Common
         {
             public static readonly object SyncLock = new object();
         }
-        private class DictionaryWithNullKey<TKey, TValue> : Dictionary<TKey, TValue>
+        private class DictionaryWithNullKey<TKey, TDictValue> : Dictionary<TKey, TDictValue>
         {
-            public TValue NullValue { get; set; }
+            public TDictValue NullValue { get; set; }
         }
     }
 }
